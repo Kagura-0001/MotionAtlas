@@ -1,0 +1,3 @@
+include: _default_template_yaml
+task: motionatlas_bench_first
+process_docs: !function utils.motionatlas_process_docs

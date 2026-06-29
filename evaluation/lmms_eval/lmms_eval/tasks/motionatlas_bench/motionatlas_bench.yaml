@@ -1,0 +1,3 @@
+group: motionatlas_bench
+task:
+  - motionatlas_bench_first

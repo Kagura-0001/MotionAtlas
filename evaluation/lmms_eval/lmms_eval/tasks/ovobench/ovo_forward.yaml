@@ -1,0 +1,28 @@
+dataset_path: kcz358/OVOBench
+dataset_name: forward
+task: "ovo_forward"
+test_split: test
+output_type: generate_until_multi_round
+doc_to_text: !function utils.ovo_forward_doc_to_text
+doc_to_visual: !function utils.ovo_doc_to_visual
+doc_to_target: "answer"
+process_results: !function utils.ovo_forward_process_results
+
+generation_kwargs:
+  max_new_tokens: 128
+  temperature: 0
+  do_sample: false
+
+metric_list:
+  - metric: forward_acc
+    aggregation: !function utils.ovo_forward_acc
+    higher_is_better: true
+
+lmms_eval_specific_kwargs:
+  default:
+    # Optional: path to a pre-extracted chunked videos directory.
+    # If empty, chunks are auto-downloaded into $HF_HOME/ovobench.
+    data_dir: null
+
+metadata:
+  version: 0.0

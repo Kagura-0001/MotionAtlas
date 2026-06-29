@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MotionAtlas Demos</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5f6b7d;
+      --line: #d9e0ea;
+      --soft: #f5f7fb;
+      --accent: #0f766e;
+      --accent-dark: #0d5752;
+      --max: 1080px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+      line-height: 1.6;
+    }
+    .wrap {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 48px 0 64px;
+    }
+    h1 {
+      position: relative;
+      display: inline-block;
+      margin: 0 0 2rem;
+      font-size: clamp(1.85rem, 3.2vw, 2.2rem);
+      line-height: 1.25;
+    }
+    h1::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 50px;
+      height: 4px;
+      background: #007aff;
+      border-radius: 2px;
+    }
+    .lead {
+      max-width: 900px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .gar-carousel {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      box-shadow: 0 20px 45px rgba(23, 32, 51, 0.08);
+      padding: 16px;
+    }
+    .gar-track { position: relative; min-height: 420px; }
+    .gar-slide {
+      display: none;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.92fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+    .gar-slide.active { display: grid; animation: gar-fade 0.5s ease; }
+    @keyframes gar-fade { from { opacity: 0; } to { opacity: 1; } }
+    .gar-media {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+      background: #0c1018;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .gar-media video {
+      width: 100%;
+      height: 100%;
+      max-height: 460px;
+      object-fit: contain;
+      background: #0c1018;
+    }
+    .gar-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 4px 4px 4px 0;
+    }
+    .gar-tag {
+      align-self: flex-start;
+      margin-bottom: 12px;
+      padding: 5px 13px;
+      border-radius: 999px;
+      background: linear-gradient(100deg, var(--accent) 0%, #0ea5e9 100%);
+      color: #fff;
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+    .gar-caption-label {
+      margin: 0 0 8px;
+      color: var(--accent-dark);
+      font-size: 1.02rem;
+      font-weight: 800;
+    }
+    .gar-caption {
+      overflow-y: auto;
+      max-height: 420px;
+      padding-right: 10px;
+      color: #2a3445;
+      font-size: 0.96rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--soft);
+    }
+    .gar-caption p { margin: 0 0 0.7em; }
+    .gar-caption p:last-child { margin-bottom: 0; }
+    .gar-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(15, 23, 33, 0.55);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 5;
+    }
+    .gar-nav:hover { background: rgba(15, 23, 33, 0.82); }
+    .gar-nav.prev { left: 6px; }
+    .gar-nav.next { right: 6px; }
+    .gar-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .gar-dots { display: flex; gap: 8px; }
+    .gar-dot {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #cdd6e2;
+      cursor: pointer;
+    }
+    .gar-dot.active { background: var(--accent); transform: scale(1.3); }
+    .gar-play {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .gar-counter { min-width: 46px; color: var(--muted); font-size: 0.86rem; text-align: center; }
+    @media (max-width: 760px) {
+      .gar-slide.active { grid-template-columns: 1fr; }
+      .gar-track { min-height: 0; }
+      .gar-media, .gar-media video { min-height: 0; max-height: 340px; }
+      .gar-media { aspect-ratio: 16 / 10; }
+      .gar-caption { max-height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>MotionAtlas Demos</h1>
+    <p class="lead">
+      Examples from <strong>MotionAtlas-Data</strong>. Given a user-specified region (highlighted in each clip),
+      MotionAtlas produces a detailed, temporally grounded description of that region. Use the arrows to browse examples.
+    </p>
+
+    <div class="gar-carousel">
+      <div class="gar-track">
+        <article class="gar-slide">
+          <div class="gar-media">
+            <video src="videos/demo_gym.mp4" muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="gar-text">
+            <span class="gar-tag">Highlighted region</span>
+            <h3 class="gar-caption-label">Region Motion Caption</h3>
+            <div class="gar-caption">
+              <p>At the start of the sequence, the boy wearing a blue top stands beside the low horizontal bar. An adult woman in a dark green short-sleeve shirt supports his waist and back to assist him as he performs a forward flip. After the flip, his feet land steadily on the padded mat on the opposite side of the low bar.</p>
+              <p>Once stable on his feet, he immediately turns around, walks quickly toward the wooden steps next to the uneven bars, and climbs rapidly to the wooden jumping platform at the top. He then pushes off the platform, leaps upward with both arms fully extended, and grabs the high horizontal bar. Hanging beneath the bar with his arms completely straight, he swings gently back and forth a few times before releasing his grip. He drops straight down onto the thick bright red safety mat directly under the high bar.</p>
+              <p>His feet hit the mat first, and he bends his knees naturally to absorb the impact of landing, then straightens up to stand upright. After steadying himself, he turns and walks left across the red mat toward the side of the gym with wall bars and trampolines, moving away from the area under the high bar.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="gar-slide">
+          <div class="gar-media">
+            <video src="videos/demo_dogs.mp4" muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="gar-text">
+            <span class="gar-tag">Highlighted region</span>
+            <h3 class="gar-caption-label">Region Motion Caption</h3>
+            <div class="gar-caption">
+              <p>In a static high-angle shot set on a tiled floor, a light brown dog remains standing on all fours on the light beige ceramic tiles next to a pink, long-furred dog bed. Its head is lowered, with its snout close to the head and neck area of a Corgi wearing pink printed clothes inside the bed, repeatedly nudging and sniffing the Corgi with its nose, its attention fully focused on the Corgi throughout, while its tail hangs down naturally and its front legs firmly support its weight.</p>
+              <p>When the Corgi in the bed turns around and bites a gray blanket with a white five-pointed star pattern, the light brown dog steps forward to grab the other end of the blanket, engaging in a two-way tug-of-war with the Corgi: it adjusts its center of gravity by slightly shifting its front legs, its body swaying gently with the force of the pulling, during which it briefly lifts a front paw to touch the blanket, and its head moves slightly up, down, forward, and backward following the tugging motions as the two dogs yank the blanket back and forth, its tail lifting slightly and wagging gently during the process.</p>
+              <p>After tugging for a while, the Corgi lets go of the blanket and moves close to the light brown dog's snout; the light brown dog lowers its head to nuzzle and sniff snouts with the Corgi, making no further contact with the blanket. When the Corgi grabs the blanket again, plants its front legs on the edge of the dog bed, stands up straight, and lifts its head, the light brown dog also raises its head to interact face-to-face with the upright Corgi, maintaining its standing posture throughout and making minor adjustments to its body position to sustain the interaction.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="gar-slide">
+          <div class="gar-media">
+            <video src="videos/demo_dance.mp4" muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="gar-text">
+            <span class="gar-tag">Highlighted region</span>
+            <h3 class="gar-caption-label">Region Motion Caption</h3>
+            <div class="gar-caption">
+              <p>Filmed on a handheld camera that pans horizontally to track a circular communal dance formation, the footage centers on a female dancer performing the energetic, traditional Indian Garba folk dance, clad in a voluminous black embroidered flared skirt paired with a bright green sheer scarf. Throughout the sequence, she maintains consistent, even spacing from her fellow dancers, aligns her movements perfectly with the collective group rhythm, and uses small, soft stepping motions to coordinate with every turn and positional change across the formation.</p>
+              <p>She first appears with her back to the camera, her own right arm raised above her head, her left arm bent loosely in front of her torso swaying gently to the beat, while her green scarf hangs down her back. As she takes small steps and turns gradually to face the viewer&rsquo;s right, her arm positions shift fluidly with the dance. As the dance progresses, two foreground dancers&mdash;one in a deep purple embroidered long skirt, the other in a green top and bright yellow flared skirt&mdash;spin quickly clockwise to exchange positions, briefly obscuring the core dancer entirely; only a narrow strip of her green scarf remains visible during this brief occlusion.</p>
+              <p>She continues following the circular path of the formation, spinning rapidly clockwise around her own axis; the centrifugal force of her fast turns flares her heavy skirt out into a smooth, rounded arc while her green scarf is flung forward to float in front of her chest. When she turns her back fully to the camera, she transitions into fast counterclockwise spins, her skirt flaring out almost perfectly horizontal from the force of her rotation, her arms extended diagonally upward and out to her sides. As the clip concludes, she is still mid-spin, facing toward the viewer&rsquo;s front-left, her green scarf floating lightly beside her with the momentum of her turns.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="gar-slide">
+          <div class="gar-media">
+            <video src="videos/demo_tunnel.mp4" muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="gar-text">
+            <span class="gar-tag">Highlighted region</span>
+            <h3 class="gar-caption-label">Region Motion Caption</h3>
+            <div class="gar-caption">
+              <p>Seen from a first-person perspective traveling through a well-lit tunnel, a dark-colored SUV is initially positioned directly ahead in the left lane. Initial Straight-Driving Phase: the black sedan is centered in the frame, directly ahead of the camera car in the left lane and driving straight toward the background. A silver sedan ahead of it in the right lane accelerates forward and quickly exits the right side of the frame.</p>
+              <p>Right Lane-Change Phase: intending to overtake a white vehicle, the distance between the two cars rapidly decreases. The black sedan smoothly steers to the right, gradually crossing the dashed white dividing line, and enters the right lane.</p>
+              <p>Emergency Left Evasive Phase: just as the black sedan enters the right lane and accelerates to pass the white car, it immediately activates its left turn signal and makes an emergency swerve to the left, darting back into the left lane and traveling diagonally toward the left side of the frame, getting as close as possible to the solid white line separating the oncoming traffic.</p>
+              <p>Post-Evasion Realignment Phase: after fully returning to the left lane, the black sedan crosses paths with a white SUV that has entered the right lane, then makes a minor rightward steering correction to straighten out and continues driving straight ahead in the left lane.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <button class="gar-nav prev" type="button" aria-label="Previous example">&#10094;</button>
+      <button class="gar-nav next" type="button" aria-label="Next example">&#10095;</button>
+
+      <div class="gar-controls">
+        <button class="gar-play" type="button" aria-label="Pause autoplay">&#10073;&#10073;</button>
+        <div class="gar-dots" aria-hidden="true"></div>
+        <span class="gar-counter"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var carousel = document.querySelector('.gar-carousel');
+      if (!carousel) return;
+
+      var slides = Array.prototype.slice.call(carousel.querySelectorAll('.gar-slide'));
+      var prevBtn = carousel.querySelector('.gar-nav.prev');
+      var nextBtn = carousel.querySelector('.gar-nav.next');
+      var playBtn = carousel.querySelector('.gar-play');
+      var dotsWrap = carousel.querySelector('.gar-dots');
+      var counter = carousel.querySelector('.gar-counter');
+
+      var current = 0;
+      var playing = true;
+      var timer = null;
+      var INTERVAL = 14000;
+
+      var dots = slides.map(function (_, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'gar-dot';
+        dot.setAttribute('aria-label', 'Go to example ' + (i + 1));
+        dot.addEventListener('click', function () { show(i); reset(); });
+        dotsWrap.appendChild(dot);
+        return dot;
+      });
+
+      function show(n) {
+        current = (n + slides.length) % slides.length;
+        slides.forEach(function (slide, i) {
+          var active = i === current;
+          slide.classList.toggle('active', active);
+          dots[i].classList.toggle('active', active);
+          var v = slide.querySelector('video');
+          if (active) {
+            try { v.currentTime = 0; v.play().catch(function () {}); } catch (e) {}
+          } else {
+            v.pause();
+          }
+        });
+        counter.textContent = (current + 1) + ' / ' + slides.length;
+      }
+
+      function change(step) { show(current + step); reset(); }
+      function start() { timer = setInterval(function () { show(current + 1); }, INTERVAL); }
+      function reset() { clearInterval(timer); if (playing) start(); }
+
+      function togglePlay() {
+        playing = !playing;
+        playBtn.innerHTML = playing ? '&#10073;&#10073;' : '&#9658;';
+        playBtn.setAttribute('aria-label', playing ? 'Pause autoplay' : 'Play autoplay');
+        reset();
+      }
+
+      prevBtn.addEventListener('click', function () { change(-1); });
+      nextBtn.addEventListener('click', function () { change(1); });
+      playBtn.addEventListener('click', togglePlay);
+
+      show(0);
+      start();
+    })();
+  </script>
+</body>
+</html>
