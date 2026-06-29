@@ -40,15 +40,16 @@ Jason Li, and
 
 Examples from **MotionAtlas-Data**. Given a user-specified region (highlighted in each clip), MotionAtlas produces a detailed, temporally grounded description of that region.
 
+<p align="center">
+  <img src="demo/previews/demo_gym.gif" width="48%" alt="MotionAtlas gym demo" />
+  <img src="demo/previews/demo_dogs.gif" width="48%" alt="MotionAtlas dog interaction demo" />
+</p>
+<p align="center">
+  <img src="demo/previews/demo_tunnel.gif" width="48%" alt="MotionAtlas tunnel driving demo" />
+  <img src="demo/previews/demo_dance.gif" width="48%" alt="MotionAtlas dance demo" />
+</p>
+
 **[Interactive Demo](demo/index.html)** | **[Project Page](https://kagura-0001.github.io/projects/MotionAtlas/#demos)**
-
-Run locally after cloning:
-
-```bash
-cd demo
-python3 -m http.server 8080
-# open http://localhost:8080
-```
 
 # Evaluation Quick Start
 
@@ -61,34 +62,27 @@ The benchmark provides two increasingly difficult **grounding settings**:
 
 ## 1. Environment
 
-Use an isolated Python environment for the benchmark runner. From the repository root:
+Install dependencies from the provided `pyproject.toml` with `uv`:
 
 ```bash
-# Recommended: uv
-uv venv --python 3.10 .venv
-source .venv/bin/activate
-uv pip install -U pip
-uv pip install numpy opencv-python-headless pillow pycocotools requests tqdm google-genai "huggingface_hub[cli]"
+uv sync
 ```
 
-If you do not use `uv`, create the same environment with the Python standard library:
+If you also serve the Qwen3-VL caption model with the provided vLLM script, install the optional serving group. The CUDA 12.9 PyTorch and vLLM wheel sources are pinned in `pyproject.toml`:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -U pip
-python -m pip install numpy opencv-python-headless pillow pycocotools requests tqdm google-genai "huggingface_hub[cli]"
+uv sync --group serve
 ```
 
-These packages cover the MotionAtlas-Bench runner, mask rendering, Gemini judging, and the `hf` download CLI used below. The Qwen3-VL caption model server in Step 3 requires a separate model-serving environment with `vllm serve` available.
+The base environment covers the MotionAtlas-Bench runner, mask rendering, Gemini judging, and the `hf` download CLI used below. The `serve` group adds `vllm` for Step 3.
 
 ## 2. Download MotionAtlas-Bench
 
 MotionAtlas-Bench is gated; accept the terms on the [dataset page](https://huggingface.co/datasets/maxLWSv2/motionatlas-bench), then log in and download:
 
 ```bash
-hf auth login
-hf download maxLWSv2/motionatlas-bench --repo-type dataset --local-dir ../motionatlas-bench-v1
+uv run hf auth login
+uv run hf download maxLWSv2/motionatlas-bench --repo-type dataset --local-dir ../motionatlas-bench-v1
 ```
 
 The release contains `mcqs.jsonl` (one MCQ per line), the `videos/` media referenced by `video_path` (either `.mp4` files or directories of ordered image frames), and dataset bookkeeping (`manifest.json`, `checksums.sha256`).
@@ -106,7 +100,7 @@ DP_SIZE=8 \
 DP_BACKEND=mp \
 MAX_NUM_SEQS=8 \
 PORT=8000 \
-bash scripts/serve_qwen3vl_vllm.sh
+uv run bash scripts/serve_qwen3vl_vllm.sh
 ```
 
 To evaluate our released model instead, point `MODEL_PATH` at [`maxLWSv2/MotionAtlas-4B`](https://huggingface.co/maxLWSv2/MotionAtlas-4B). The serve script defaults to `DP_SIZE=1` for portability; set `DP_SIZE=8` on 8-GPU nodes to expose one vLLM replica per GPU. Reduce `DP_SIZE` and `MAX_NUM_SEQS` if GPU memory is tight.
@@ -116,7 +110,7 @@ To evaluate our released model instead, point `MODEL_PATH` at [`maxLWSv2/MotionA
 ```bash
 export GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 
-python -m evaluation.motionatlas_bench.run_eval \
+uv run python -m evaluation.motionatlas_bench.run_eval \
   --data-root ../motionatlas-bench-v1 \
   --output outputs/qwen3vl4b_first_mask_16_gemini25pro \
   --setting first_mask \
@@ -135,7 +129,7 @@ This writes `captions.jsonl`, `judge_predictions.jsonl`, `metrics.json`, and `ru
 To use a **local OpenAI-compatible text judge** instead of Gemini, serve it with vLLM and switch the judge provider:
 
 ```bash
-python -m evaluation.motionatlas_bench.run_eval \
+uv run python -m evaluation.motionatlas_bench.run_eval \
   --data-root ../motionatlas-bench-v1 \
   --output outputs/qwen3vl4b_first_mask_16_qwen_judge \
   --setting first_mask \

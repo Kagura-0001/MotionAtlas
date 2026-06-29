@@ -1,0 +1,59 @@
+[project]
+name = "motionatlas"
+version = "0.1.0"
+description = "MotionAtlas benchmark runner and serving utilities"
+requires-python = ">=3.11, <3.13"
+dependencies = [
+]
+
+[dependency-groups]
+runtime = [
+    "google-genai",
+    "huggingface-hub",
+    "numpy",
+    "opencv-python-headless",
+    "pillow",
+    "pycocotools",
+    "requests",
+    "tqdm",
+]
+serve = [
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "torchaudio==2.11.0",
+    "torchcodec==0.11.1",
+    "vllm==0.22.0",
+]
+
+[tool.uv]
+package = false
+default-groups = [
+    "runtime",
+]
+
+[[tool.uv.index]]
+explicit = true
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu129"
+
+[[tool.uv.index]]
+explicit = true
+name = "vllm-stable"
+url = "https://wheels.vllm.ai/0.22.0/cu129"
+
+[tool.uv.sources]
+torch = [
+    {index = "pytorch-cuda", marker = "sys_platform != 'darwin'"},
+]
+torchaudio = [
+    {index = "pytorch-cuda", marker = "sys_platform != 'darwin'"},
+]
+torchcodec = [
+    {index = "pytorch-cuda", marker = "sys_platform != 'darwin'"},
+]
+torchvision = [
+    {index = "pytorch-cuda", marker = "sys_platform != 'darwin'"},
+]
+vllm = [
+    {index = "vllm-stable", marker = "sys_platform == 'linux'"},
+]
