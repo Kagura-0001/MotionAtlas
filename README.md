@@ -1,4 +1,4 @@
-# MotionAtlas: Detailed Region Captioning for Motion-Centric Videos
+# MotionAtlas: Detailed Region Captioning for Motion-Centric Videos (ECCV 2026)
 
 by
 [Weisong Liu](https://scholar.google.com/citations?user=a20rvfAAAAAJ),
@@ -40,14 +40,36 @@ Jason Li, and
 
 Examples from **MotionAtlas-Data**. Given a user-specified region (highlighted in each clip), MotionAtlas produces a detailed, temporally grounded description of that region.
 
-<p align="center">
-  <img src="demo/previews/demo_gym.gif" width="48%" alt="MotionAtlas gym demo" />
-  <img src="demo/previews/demo_dogs.gif" width="48%" alt="MotionAtlas dog interaction demo" />
-</p>
-<p align="center">
-  <img src="demo/previews/demo_tunnel.gif" width="48%" alt="MotionAtlas tunnel driving demo" />
-  <img src="demo/previews/demo_dance.gif" width="48%" alt="MotionAtlas dance demo" />
-</p>
+<table>
+  <tr>
+    <td width="42%"><img src="demo/previews/demo_gym.gif" alt="MotionAtlas gym demo" /></td>
+    <td>
+      <strong>Region Motion Caption</strong><br><br>
+      At the start of the sequence, the boy wearing a blue top stands beside the low horizontal bar while an adult woman supports his waist and back as he performs a forward flip. After landing, he turns around, climbs the wooden steps to the raised platform, jumps to grab the high horizontal bar, swings gently, releases, drops to the red safety mat, bends his knees to absorb the landing, then walks left across the mat.
+    </td>
+  </tr>
+  <tr>
+    <td width="42%"><img src="demo/previews/demo_dogs.gif" alt="MotionAtlas dog interaction demo" /></td>
+    <td>
+      <strong>Region Motion Caption</strong><br><br>
+      A light brown dog stands beside a pink dog bed and repeatedly nudges and sniffs the Corgi inside. When the Corgi bites a gray star-patterned blanket, the light brown dog grabs the other end and joins a tug-of-war, shifting its front legs and moving its head with the pulling force. After the tugging, it lowers its head to nuzzle and sniff the Corgi again, then raises its head for face-to-face interaction while maintaining a standing posture.
+    </td>
+  </tr>
+  <tr>
+    <td width="42%"><img src="demo/previews/demo_tunnel.gif" alt="MotionAtlas tunnel driving demo" /></td>
+    <td>
+      <strong>Region Motion Caption</strong><br><br>
+      From a first-person view inside a tunnel, the dark vehicle begins directly ahead in the left lane. It drives straight while nearby traffic moves through the right lane, then steers right across the dashed lane divider to overtake. As it enters the right lane, it activates the left turn signal and swerves back into the left lane, then makes a small rightward correction and continues straight.
+    </td>
+  </tr>
+  <tr>
+    <td width="42%"><img src="demo/previews/demo_dance.gif" alt="MotionAtlas dance demo" /></td>
+    <td>
+      <strong>Region Motion Caption</strong><br><br>
+      A female Garba dancer in a black embroidered skirt and bright green scarf follows the circular group rhythm with small coordinated steps. She turns with raised arms, is briefly occluded by foreground dancers, then reappears and spins rapidly along the circular path. Her skirt flares outward and her scarf floats with the motion as she transitions through clockwise and counterclockwise spins.
+    </td>
+  </tr>
+</table>
 
 **[Interactive Demo](demo/index.html)** | **[Project Page](https://kagura-0001.github.io/projects/MotionAtlas/#demos)**
 
