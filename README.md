@@ -45,33 +45,40 @@ Examples from **MotionAtlas-Data**. Given a user-specified region (highlighted i
     <td width="42%"><img src="demo/previews/demo_gym.gif" alt="MotionAtlas gym demo" /></td>
     <td>
       <strong>Region Motion Caption</strong><br><br>
-      At the start of the sequence, the boy wearing a blue top stands beside the low horizontal bar while an adult woman supports his waist and back as he performs a forward flip. After landing, he turns around, climbs the wooden steps to the raised platform, jumps to grab the high horizontal bar, swings gently, releases, drops to the red safety mat, bends his knees to absorb the landing, then walks left across the mat.
+      <p>At the start of the sequence, the boy wearing a blue top stands beside the low horizontal bar. An adult woman in a dark green short-sleeve shirt supports his waist and back to assist him as he performs a forward flip. After the flip, his feet land steadily on the padded mat on the opposite side of the low bar.</p>
+      <p>Once stable on his feet, he immediately turns around, walks quickly toward the wooden steps next to the uneven bars, and climbs rapidly to the wooden jumping platform at the top. He then pushes off the platform, leaps upward with both arms fully extended, and grabs the high horizontal bar. Hanging beneath the bar with his arms completely straight, he swings gently back and forth a few times before releasing his grip. He drops straight down onto the thick bright red safety mat directly under the high bar.</p>
+      <p>His feet hit the mat first, and he bends his knees naturally to absorb the impact of landing, then straightens up to stand upright. After steadying himself, he turns and walks left across the red mat toward the side of the gym with wall bars and trampolines, moving away from the area under the high bar.</p>
     </td>
   </tr>
   <tr>
     <td width="42%"><img src="demo/previews/demo_dogs.gif" alt="MotionAtlas dog interaction demo" /></td>
     <td>
       <strong>Region Motion Caption</strong><br><br>
-      A light brown dog stands beside a pink dog bed and repeatedly nudges and sniffs the Corgi inside. When the Corgi bites a gray star-patterned blanket, the light brown dog grabs the other end and joins a tug-of-war, shifting its front legs and moving its head with the pulling force. After the tugging, it lowers its head to nuzzle and sniff the Corgi again, then raises its head for face-to-face interaction while maintaining a standing posture.
-    </td>
-  </tr>
-  <tr>
-    <td width="42%"><img src="demo/previews/demo_tunnel.gif" alt="MotionAtlas tunnel driving demo" /></td>
-    <td>
-      <strong>Region Motion Caption</strong><br><br>
-      From a first-person view inside a tunnel, the dark vehicle begins directly ahead in the left lane. It drives straight while nearby traffic moves through the right lane, then steers right across the dashed lane divider to overtake. As it enters the right lane, it activates the left turn signal and swerves back into the left lane, then makes a small rightward correction and continues straight.
+      <p>In a static high-angle shot set on a tiled floor, a light brown dog remains standing on all fours on the light beige ceramic tiles next to a pink, long-furred dog bed. Its head is lowered, with its snout close to the head and neck area of a Corgi wearing pink printed clothes inside the bed, repeatedly nudging and sniffing the Corgi with its nose, its attention fully focused on the Corgi throughout, while its tail hangs down naturally and its front legs firmly support its weight.</p>
+      <p>When the Corgi in the bed turns around and bites a gray blanket with a white five-pointed star pattern, the light brown dog steps forward to grab the other end of the blanket, engaging in a two-way tug-of-war with the Corgi: it adjusts its center of gravity by slightly shifting its front legs, its body swaying gently with the force of the pulling, during which it briefly lifts a front paw to touch the blanket, and its head moves slightly up, down, forward, and backward following the tugging motions as the two dogs yank the blanket back and forth, its tail lifting slightly and wagging gently during the process.</p>
+      <p>After tugging for a while, the Corgi lets go of the blanket and moves close to the light brown dog's snout; the light brown dog lowers its head to nuzzle and sniff snouts with the Corgi, making no further contact with the blanket. When the Corgi grabs the blanket again, plants its front legs on the edge of the dog bed, stands up straight, and lifts its head, the light brown dog also raises its head to interact face-to-face with the upright Corgi, maintaining its standing posture throughout and making minor adjustments to its body position to sustain the interaction.</p>
     </td>
   </tr>
   <tr>
     <td width="42%"><img src="demo/previews/demo_dance.gif" alt="MotionAtlas dance demo" /></td>
     <td>
       <strong>Region Motion Caption</strong><br><br>
-      A female Garba dancer in a black embroidered skirt and bright green scarf follows the circular group rhythm with small coordinated steps. She turns with raised arms, is briefly occluded by foreground dancers, then reappears and spins rapidly along the circular path. Her skirt flares outward and her scarf floats with the motion as she transitions through clockwise and counterclockwise spins.
+      <p>Filmed on a handheld camera that pans horizontally to track a circular communal dance formation, the footage centers on a female dancer performing the energetic, traditional Indian Garba folk dance, clad in a voluminous black embroidered flared skirt paired with a bright green sheer scarf. Throughout the sequence, she maintains consistent, even spacing from her fellow dancers, aligns her movements perfectly with the collective group rhythm, and uses small, soft stepping motions to coordinate with every turn and positional change across the formation.</p>
+      <p>She first appears with her back to the camera, her own right arm raised above her head, her left arm bent loosely in front of her torso swaying gently to the beat, while her green scarf hangs down her back. As she takes small steps and turns gradually to face the viewer&rsquo;s right, her arm positions shift fluidly with the dance. As the dance progresses, two foreground dancers&mdash;one in a deep purple embroidered long skirt, the other in a green top and bright yellow flared skirt&mdash;spin quickly clockwise to exchange positions, briefly obscuring the core dancer entirely; only a narrow strip of her green scarf remains visible during this brief occlusion.</p>
+      <p>She continues following the circular path of the formation, spinning rapidly clockwise around her own axis; the centrifugal force of her fast turns flares her heavy skirt out into a smooth, rounded arc while her green scarf is flung forward to float in front of her chest. When she turns her back fully to the camera, she transitions into fast counterclockwise spins, her skirt flaring out almost perfectly horizontal from the force of her rotation, her arms extended diagonally upward and out to her sides. As the clip concludes, she is still mid-spin, facing toward the viewer&rsquo;s front-left, her green scarf floating lightly beside her with the momentum of her turns.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="42%"><img src="demo/previews/demo_tunnel.gif" alt="MotionAtlas tunnel driving demo" /></td>
+    <td>
+      <strong>Region Motion Caption</strong><br><br>
+      <p>Seen from a first-person perspective traveling through a well-lit tunnel, a dark-colored SUV is initially positioned directly ahead in the left lane. Initial Straight-Driving Phase: the black sedan is centered in the frame, directly ahead of the camera car in the left lane and driving straight toward the background. A silver sedan ahead of it in the right lane accelerates forward and quickly exits the right side of the frame.</p>
+      <p>Right Lane-Change Phase: intending to overtake a white vehicle, the distance between the two cars rapidly decreases. The black sedan smoothly steers to the right, gradually crossing the dashed white dividing line, and enters the right lane.</p>
+      <p>Emergency Left Evasive Phase: just as the black sedan enters the right lane and accelerates to pass the white car, it immediately activates its left turn signal and makes an emergency swerve to the left, darting back into the left lane and traveling diagonally toward the left side of the frame, getting as close as possible to the solid white line separating the oncoming traffic.</p>
+      <p>Post-Evasion Realignment Phase: after fully returning to the left lane, the black sedan crosses paths with a white SUV that has entered the right lane, then makes a minor rightward steering correction to straighten out and continues driving straight ahead in the left lane.</p>
     </td>
   </tr>
 </table>
-
-**[Interactive Demo](demo/index.html)** | **[Project Page](https://kagura-0001.github.io/projects/MotionAtlas/#demos)**
 
 # Evaluation Quick Start
 
