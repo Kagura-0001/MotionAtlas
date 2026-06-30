@@ -83,6 +83,18 @@ Examples from **MotionAtlas-Data**. Given a user-specified region (highlighted i
   </tr>
 </table>
 
+# MotionAtlas-Bench Results
+
+| Model | SF Overall | SF Parts | SF Kinematics | FS Overall | FS Parts | FS Kinematics |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Gemini 3 Pro | 36.4 | 34.7 | 32.0 | 36.5 | 33.5 | 38.1 |
+| GPT-5.2 | 36.9 | 34.0 | 34.2 | 37.6 | 38.8 | 36.6 |
+| Qwen3-VL-235B | 30.5 | 27.8 | 28.9 | 33.7 | 33.2 | 31.1 |
+| Qwen3-VL-4B | 19.3 | 20.0 | 14.1 | 21.7 | 22.4 | 16.5 |
+| MotionAtlas-4B (from Qwen3-VL-4B) | 27.7 | 27.9 | 26.9 | 30.1 | 30.3 | 29.3 |
+
+SF = Single-Frame Grounding, FS = Full-Sequence Grounding. Values are accuracy (%).
+
 # Evaluation Quick Start
 
 MotionAtlas-Bench evaluation code lives under `evaluation/motionatlas_bench`. It implements the **caption-to-judge** protocol used by the benchmark: a Video-MLLM first generates a target-object motion caption from highlighted video frames, then a text judge answers each MCQ given only that caption. The judge classifies every answer as `correct` / `wrong` / `miss`, from which we report **Accuracy**, **Recall** (tendency to describe the target motion rather than answer "not mentioned"), and **Precision** (correctness when the motion is explicitly mentioned), plus a `weighted_score`.
