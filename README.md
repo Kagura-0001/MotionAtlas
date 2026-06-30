@@ -13,7 +13,7 @@ Anna Wang,
 Jason Li, and
 [Zhaoxiang Zhang](https://scholar.google.com/citations?user=qxWfV6cAAAAJ).
 
-[[Paper](TODO)] | [[Project Page](https://kagura-0001.github.io/projects/MotionAtlas/)] | [[HuggingFace Collection](https://huggingface.co/collections/maxLWSv2/motionatlas-6a3c4bb7c242d1946dc7fa41)] | [[Model](https://huggingface.co/maxLWSv2/MotionAtlas-4B)] | [[Citation](#citation)]
+[[Paper](https://arxiv.org/abs/2606.29531)] | [[Project Page](https://kagura-0001.github.io/projects/MotionAtlas/)] | [[GitHub](https://github.com/Kagura-0001/MotionAtlas)] | [[MotionAtlas-Data](https://huggingface.co/datasets/maxLWSv2/motionatlas-data)] | [[MotionAtlas-Bench](https://huggingface.co/datasets/maxLWSv2/motionatlas-bench)] | [[Model](https://huggingface.co/maxLWSv2/MotionAtlas-4B)] | [[Citation](#citation)]
 
 **TL;DR**: MotionAtlas is a system for **detailed captioning of motion-centric videos**, comprising (1) a human-annotated benchmark for *region-aware* motion understanding, (2) a scalable, high-quality data pipeline, and (3) a family of Video-MLLMs. Given a video and a spatiotemporal mask, MotionAtlas describes the motion *within the target region*, alleviating visual clutter and motion entanglement, and enabling reliable, quantifiable evaluation.
 
@@ -32,6 +32,9 @@ Jason Li, and
 
 | Resource | Link | Description |
 | --- | --- | --- |
+| **Paper** | [arXiv:2606.29531](https://arxiv.org/abs/2606.29531) | Technical report and benchmark details. |
+| **Project Page** | [kagura-0001.github.io/projects/MotionAtlas](https://kagura-0001.github.io/projects/MotionAtlas/) | Project overview, demos, and release links. |
+| **Code** | [github.com/Kagura-0001/MotionAtlas](https://github.com/Kagura-0001/MotionAtlas) | Public MotionAtlas code repository. |
 | **MotionAtlas-Bench** | [🤗 maxLWSv2/motionatlas-bench](https://huggingface.co/datasets/maxLWSv2/motionatlas-bench) | 2,073 region-level motion MCQs over 107 videos for evaluation. |
 | **MotionAtlas-Data** | [🤗 maxLWSv2/motionatlas-data](https://huggingface.co/datasets/maxLWSv2/motionatlas-data) | 159K high-quality region-level motion captioning samples for training. |
 | **MotionAtlas-4B** | [🤗 maxLWSv2/MotionAtlas-4B](https://huggingface.co/maxLWSv2/MotionAtlas-4B) | Video-MLLM fine-tuned with MotionAtlas-Data. |
@@ -196,8 +199,11 @@ If you find this project useful, please consider citing:
 @article{liu2026motionatlas,
   title   = {MotionAtlas: Detailed Region Captioning for Motion-Centric Videos},
   author  = {Liu, Weisong and Wang, Haochen and Gao, Kuan and Wang, Yuhao and Zhou, Yikang and Ren, Zhongwei and Mai, Jacky and Wang, Anna and Li, Yanwei and Li, Jason and Zhang, Zhaoxiang},
-  journal = {arXiv preprint},
-  year    = {2026}
+  journal = {arXiv preprint arXiv:2606.29531},
+  year    = {2026},
+  eprint  = {2606.29531},
+  archivePrefix = {arXiv},
+  url     = {https://arxiv.org/abs/2606.29531}
 }
 ```
 
