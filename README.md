@@ -32,9 +32,6 @@ Jason Li, and
 
 | Resource | Link | Description |
 | --- | --- | --- |
-| **Paper** | [arXiv:2606.29531](https://arxiv.org/abs/2606.29531) | Technical report and benchmark details. |
-| **Project Page** | [kagura-0001.github.io/projects/MotionAtlas](https://kagura-0001.github.io/projects/MotionAtlas/) | Project overview, demos, and release links. |
-| **Code** | [github.com/Kagura-0001/MotionAtlas](https://github.com/Kagura-0001/MotionAtlas) | Public MotionAtlas code repository. |
 | **MotionAtlas-Bench** | [🤗 maxLWSv2/motionatlas-bench](https://huggingface.co/datasets/maxLWSv2/motionatlas-bench) | 2,073 region-level motion MCQs over 107 videos for evaluation. |
 | **MotionAtlas-Data** | [🤗 maxLWSv2/motionatlas-data](https://huggingface.co/datasets/maxLWSv2/motionatlas-data) | 159K high-quality region-level motion captioning samples for training. |
 | **MotionAtlas-4B** | [🤗 maxLWSv2/MotionAtlas-4B](https://huggingface.co/maxLWSv2/MotionAtlas-4B) | Video-MLLM fine-tuned with MotionAtlas-Data. |
