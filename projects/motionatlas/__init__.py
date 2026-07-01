@@ -1,0 +1,2 @@
+"""MotionAtlas project package."""
+

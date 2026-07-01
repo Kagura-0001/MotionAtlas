@@ -17,6 +17,21 @@ runtime = [
     "requests",
     "tqdm",
 ]
+train = [
+    "datasets",
+    "decord==0.6.0",
+    "einops",
+    "mmengine==0.10.6",
+    "numpy",
+    "opencv-python-headless",
+    "pyarrow",
+    "pycocotools",
+    "pillow",
+    "pyyaml",
+    "qwen-vl-utils",
+    "safetensors",
+    "tqdm",
+]
 serve = [
     "torch==2.11.0",
     "torchvision==0.26.0",

@@ -1,0 +1,61 @@
+model:
+  name_or_path: Qwen/Qwen3-VL-4B-Instruct
+  trust_remote_code: true
+  attn_implementation: flash_attention_2
+  torch_dtype: bfloat16
+  freeze_llm: false
+  freeze_visual_encoder: false
+
+data:
+  hf_dataset: maxLWSv2/motionatlas-data
+  local_dir: ${MOTIONATLAS_DATA_ROOT:-data/motionatlas-data}
+  split: train
+  datasets:
+    - name: region_v1
+      kind: region
+      path: ${MOTIONATLAS_REGION_V1_PARQUET:-data/motionatlas-data/data/motionatlas_v1/train.parquet}
+    - name: region_v2
+      kind: region
+      path: ${MOTIONATLAS_REGION_V2_PARQUET:-data/motionatlas-data/data/motionatlas_v2/train.parquet}
+    - name: recipe
+      kind: recipe
+      path: ${MOTIONATLAS_RECIPE_PARQUET:-data/motionatlas-data/data/recipe/train.parquet}
+      media_root: ${MOTIONATLAS_RECIPE_MEDIA_ROOT:-data/motionatlas-data}
+      skip_video: true
+  max_frames: 16
+  per_frame_tokens: 256
+  max_seq_length: 16384
+  max_samples: 0
+  source_sample_limits: null
+  source_sample_seed: 42
+  strict_single_modality: true
+  source_roots:
+    SA-V: ${MOTIONATLAS_SAV_ROOT}
+    MeViS: ${MOTIONATLAS_MEVIS_ROOT}
+    TAO-Amodel: ${MOTIONATLAS_TAO_ROOT}
+    DanceTrack: ${MOTIONATLAS_DANCETRACK_ROOT}
+    GOT-10k: ${MOTIONATLAS_GOT10K_ROOT}
+    ViCaS: ${MOTIONATLAS_VICAS_ROOT}
+
+annotation:
+  mode: highlight
+  prompt: Describe the highlighted object in detail.
+  contour_color: [0, 255, 0]
+  contour_thickness: 2
+
+train:
+  work_dir: ${MOTIONATLAS_WORK_DIR:-work_dirs/qwen3vl_4b_motionatlas}
+  batch_size: 2
+  gradient_accumulation_steps: 2
+  num_workers: 8
+  epochs: 1
+  lr: 1.0e-5
+  warmup_ratio: 0.03
+  save_steps: 2000
+  save_total_limit: 3
+  seed: 42
+
+distributed:
+  gpus: 8
+  deepspeed: deepspeed_zero2
+  timeout_seconds: 3600
