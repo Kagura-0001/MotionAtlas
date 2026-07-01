@@ -194,7 +194,26 @@ The reported metrics span six motion aspects — **Spatial**, **Parts**, **Kinem
 
 # Training
 
-Training code and configs (with MotionAtlas-Data) will be released here. See [MotionAtlas-Data](https://huggingface.co/datasets/maxLWSv2/motionatlas-data) for the training corpus and its media-preparation guide.
+MotionAtlas training follows the same lightweight entrypoint style as GAR: one config, one distributed launch command, and one checkpoint conversion command.
+
+```bash
+# 1. Inspect dataset/media wiring.
+python projects/motionatlas/tools/inspect_dataset.py \
+  projects/motionatlas/configs/qwen3vl_4b_motionatlas.yaml \
+  --limit 32
+
+# 2. Train Qwen3-VL-4B with MotionAtlas-Data.
+bash scripts/train_qwen3vl.sh
+
+# 3. Convert the training checkpoint to HuggingFace format.
+python projects/motionatlas/tools/convert_to_hf.py \
+  --config projects/motionatlas/configs/qwen3vl_4b_motionatlas.yaml \
+  --checkpoint work_dirs/qwen3vl_4b_motionatlas/iter_xxx.pth \
+  --base-model /path/to/Qwen3-VL-4B-Instruct \
+  --output-dir outputs/MotionAtlas-4B
+```
+
+See [`docs/training.md`](docs/training.md) for environment setup, MotionAtlas-Data media roots, smoke runs, and conversion details.
 
 # License
 
