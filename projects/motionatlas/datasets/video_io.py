@@ -49,35 +49,35 @@ def media_frame_count(path: str | Path) -> int:
         return total
 
 
-def _read_frame_dir(path: Path, indices: list[int]) -> list[np.ndarray]:
+def _read_frame_dir(path: Path, indices: list[int]) -> dict[int, np.ndarray]:
     files = list_frame_dir(path)
-    frames = []
+    frames = {}
     for idx in indices:
         if 0 <= idx < len(files):
-            img = Image.open(files[idx]).convert("RGB")
-            frames.append(np.asarray(img))
+            with Image.open(files[idx]) as img:
+                frames[idx] = np.asarray(img.convert("RGB"))
     return frames
 
 
-def _read_gif(path: Path, indices: list[int]) -> list[np.ndarray]:
+def _read_gif(path: Path, indices: list[int]) -> dict[int, np.ndarray]:
     with Image.open(path) as img:
         all_frames = [np.asarray(frame.convert("RGB")) for frame in ImageSequence.Iterator(img)]
-    return [all_frames[idx] for idx in indices if 0 <= idx < len(all_frames)]
+    return {idx: all_frames[idx] for idx in indices if 0 <= idx < len(all_frames)}
 
 
-def _read_video_decord(path: Path, indices: list[int]) -> list[np.ndarray]:
+def _read_video_decord(path: Path, indices: list[int]) -> dict[int, np.ndarray]:
     from decord import VideoReader, cpu
 
     vr = VideoReader(str(path), ctx=cpu(0))
-    valid = [idx for idx in indices if 0 <= idx < len(vr)]
+    valid = [idx for idx in dict.fromkeys(indices) if 0 <= idx < len(vr)]
     if not valid:
-        return []
-    return [frame.astype(np.uint8) for frame in vr.get_batch(valid).asnumpy()]
+        return {}
+    return {idx: frame.astype(np.uint8) for idx, frame in zip(valid, vr.get_batch(valid).asnumpy())}
 
 
-def _read_video_cv2(path: Path, indices: list[int]) -> list[np.ndarray]:
-    wanted = set(indices)
-    frames: list[np.ndarray] = []
+def _read_video_cv2(path: Path, indices: list[int]) -> dict[int, np.ndarray]:
+    wanted = {idx for idx in indices if idx >= 0}
+    frames: dict[int, np.ndarray] = {}
     cap = cv2.VideoCapture(str(path))
     frame_idx = 0
     while cap.isOpened():
@@ -85,7 +85,7 @@ def _read_video_cv2(path: Path, indices: list[int]) -> list[np.ndarray]:
         if not ok:
             break
         if frame_idx in wanted:
-            frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            frames[frame_idx] = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             if len(frames) == len(wanted):
                 break
         frame_idx += 1
@@ -93,7 +93,7 @@ def _read_video_cv2(path: Path, indices: list[int]) -> list[np.ndarray]:
     return frames
 
 
-def read_media_frames(path: str | Path, indices: list[int]) -> list[np.ndarray]:
+def read_media_frames(path: str | Path, indices: list[int]) -> dict[int, np.ndarray]:
     path = Path(path)
     if path.is_dir():
         return _read_frame_dir(path, indices)
@@ -113,4 +113,3 @@ def sampled_indices_with_annotation(total: int, max_frames: int, annotation_fram
     if len(merged) <= max_frames + 1:
         return merged
     return merged
-

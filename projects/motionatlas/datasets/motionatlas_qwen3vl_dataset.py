@@ -20,13 +20,60 @@ from .annotation import (
     text_bbox_prompt,
 )
 from .rope2d import get_rope_index_3
-from .video_io import media_frame_count, read_media_frames, sampled_indices_with_annotation, uniform_indices
+from .video_io import media_frame_count, read_media_frames, sampled_indices_with_annotation
 
 IGNORE_INDEX = -100
+FALLBACK_ASSISTANT_START_IDS = [151644, 77091, 198]
+FALLBACK_IM_END_IDS = [151645]
 
 
-def preprocess_qwen_visual(messages: list[dict[str, Any]], processor: Any) -> dict[str, Any]:
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+def _encode_template_ids(processor: Any, text: str, fallback: list[int]) -> list[int]:
+    tokenizer = getattr(processor, "tokenizer", None)
+    if tokenizer is None:
+        return fallback
+    ids = tokenizer.encode(text, add_special_tokens=False)
+    return list(ids) if ids else fallback
+
+
+def _find_subsequence(values: list[int], pattern: list[int], start: int = 0) -> int:
+    if not pattern:
+        return -1
+    end = len(values) - len(pattern) + 1
+    for pos in range(start, max(start, end)):
+        if values[pos : pos + len(pattern)] == pattern:
+            return pos
+    return -1
+
+
+def _assistant_labels(input_ids: torch.Tensor, processor: Any) -> torch.Tensor | None:
+    ids = input_ids[0].tolist()
+    assistant_start_ids = _encode_template_ids(
+        processor,
+        "<|im_start|>assistant\n",
+        FALLBACK_ASSISTANT_START_IDS,
+    )
+    im_end_ids = _encode_template_ids(processor, "<|im_end|>", FALLBACK_IM_END_IDS)
+
+    labels = torch.full_like(input_ids, IGNORE_INDEX)
+    pos = 0
+    found = False
+    while pos < len(ids):
+        start = _find_subsequence(ids, assistant_start_ids, pos)
+        if start < 0:
+            break
+        answer_start = start + len(assistant_start_ids)
+        answer_end = _find_subsequence(ids, im_end_ids, answer_start)
+        if answer_end < 0:
+            return None
+        label_end = answer_end + len(im_end_ids)
+        labels[0, answer_start:label_end] = input_ids[0, answer_start:label_end]
+        found = True
+        pos = label_end
+    return labels if found else None
+
+
+def preprocess_qwen_visual(messages: list[dict[str, Any]], processor: Any) -> dict[str, Any] | None:
+    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=False)
     images, videos = process_vision_info(messages, image_patch_size=16)
     inputs = processor(text=text, images=images, videos=videos, do_resize=False, return_tensors="pt")
 
@@ -34,19 +81,9 @@ def preprocess_qwen_visual(messages: list[dict[str, Any]], processor: Any) -> di
     if isinstance(input_ids, list):
         input_ids = torch.tensor(input_ids).unsqueeze(0)
 
-    labels = torch.full_like(input_ids, IGNORE_INDEX)
-    ids = input_ids[0].tolist()
-    pos = 0
-    while pos < len(ids):
-        if ids[pos] == 77091:  # assistant token in Qwen3-VL chat template
-            ans_start = pos + 2
-            ans_end = ans_start
-            while ans_end < len(ids) and ids[ans_end] != 151645:
-                ans_end += 1
-            if ans_end < len(ids):
-                labels[0, ans_start : ans_end + 2] = input_ids[0, ans_start : ans_end + 2]
-                pos = ans_end
-        pos += 1
+    labels = _assistant_labels(input_ids, processor)
+    if labels is None:
+        return None
 
     inputs["input_ids"] = input_ids
     inputs["labels"] = labels
@@ -227,10 +264,9 @@ class MotionAtlasQwen3VLDataset(Dataset):
             return None
         ann_fid = int(ann_frame["frame_idx"])
         frame_indices = sampled_indices_with_annotation(total, self.max_frames, ann_fid)
-        raw_frames = read_media_frames(media_path, frame_indices)
-        if not raw_frames:
+        fid_to_frame = read_media_frames(media_path, frame_indices)
+        if not fid_to_frame:
             return None
-        fid_to_frame = {fid: frame for fid, frame in zip(frame_indices, raw_frames)}
         ann_rgb = fid_to_frame.get(ann_fid)
         if ann_rgb is None:
             return None
@@ -280,6 +316,8 @@ class MotionAtlasQwen3VLDataset(Dataset):
         except Exception as exc:
             print(f"[MotionAtlas] tokenization failed: {exc}", flush=True)
             return None
+        if out is None:
+            return None
         seq_len = int(out["input_ids"][0].size(0))
         if self.max_seq_length and seq_len > self.max_seq_length:
             print(f"[MotionAtlas] skip seq_len={seq_len} > max_seq_length={self.max_seq_length}", flush=True)
@@ -313,4 +351,3 @@ class MotionAtlasQwen3VLDataset(Dataset):
             if result is not None:
                 return result
         raise RuntimeError(f"Failed to load a valid MotionAtlas sample near index {index}")
-
