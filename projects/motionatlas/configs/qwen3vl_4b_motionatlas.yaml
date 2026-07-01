@@ -10,10 +10,25 @@ data:
   hf_dataset: maxLWSv2/motionatlas-data
   local_dir: ${MOTIONATLAS_DATA_ROOT:-data/motionatlas-data}
   split: train
+  datasets:
+    - name: region_v1
+      kind: region
+      path: ${MOTIONATLAS_REGION_V1_PARQUET:-data/motionatlas-data/data/motionatlas_v1/train.parquet}
+    - name: region_v2
+      kind: region
+      path: ${MOTIONATLAS_REGION_V2_PARQUET:-data/motionatlas-data/data/motionatlas_v2/train.parquet}
+    - name: recipe
+      kind: recipe
+      path: ${MOTIONATLAS_RECIPE_PARQUET:-data/motionatlas-data/data/recipe/train.parquet}
+      media_root: ${MOTIONATLAS_RECIPE_MEDIA_ROOT:-data/motionatlas-data}
+      skip_video: true
   max_frames: 16
   per_frame_tokens: 256
   max_seq_length: 16384
   max_samples: 0
+  source_sample_limits: null
+  source_sample_seed: 42
+  strict_single_modality: true
   source_roots:
     SA-V: ${MOTIONATLAS_SAV_ROOT}
     MeViS: ${MOTIONATLAS_MEVIS_ROOT}
@@ -44,4 +59,3 @@ distributed:
   gpus: 8
   deepspeed: deepspeed_zero2
   timeout_seconds: 3600
-

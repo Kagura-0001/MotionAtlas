@@ -31,16 +31,24 @@ Adjust the PyTorch CUDA wheel index for your cluster if it does not use CUDA
 
 ## 2. Data
 
-Download MotionAtlas-Data metadata:
+Download MotionAtlas-Data metadata and rebuild the sharded recipe parquet:
 
 ```bash
-hf download maxLWSv2/motionatlas-data --repo-type dataset --local-dir data/motionatlas-data
+bash scripts/download_motionatlas_data.sh data/motionatlas-data
 ```
 
-Then set media roots for the public source keys used by the dataset:
+The default recipe mixes region data from `data/motionatlas_v1` and
+`data/motionatlas_v2` with the general SFT recipe in
+`data/recipe/train.parquet`. Recipe video samples are skipped by default, so
+the first-stage smoke path does not require extracting the large video archive.
+
+Set media roots for the public region source keys used by the dataset:
 
 ```bash
 export MOTIONATLAS_DATA_ROOT=data/motionatlas-data
+export MOTIONATLAS_REGION_V1_PARQUET=data/motionatlas-data/data/motionatlas_v1/train.parquet
+export MOTIONATLAS_REGION_V2_PARQUET=data/motionatlas-data/data/motionatlas_v2/train.parquet
+export MOTIONATLAS_RECIPE_PARQUET=data/motionatlas-data/data/recipe/train.parquet
 export MOTIONATLAS_SAV_ROOT=/path/to/SA-V
 export MOTIONATLAS_MEVIS_ROOT=/path/to/MeViS
 export MOTIONATLAS_TAO_ROOT=/path/to/TAO-Amodal
@@ -57,6 +65,10 @@ The media path rule is fixed:
 
 `media_type: video` points to a video file. `media_type: frame_dir` points to a
 directory of ordered image frames.
+
+To enable recipe video samples later, extract the recipe video archive under
+`MOTIONATLAS_RECIPE_MEDIA_ROOT` so paths like `videos/<source>/...` exist, then
+set the recipe entry's `skip_video` field to `false` in the YAML.
 
 ## 3. Preflight
 

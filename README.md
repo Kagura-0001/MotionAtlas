@@ -197,15 +197,18 @@ The reported metrics span six motion aspects — **Spatial**, **Parts**, **Kinem
 MotionAtlas training follows the same lightweight entrypoint style as GAR: one config, one distributed launch command, and one checkpoint conversion command.
 
 ```bash
-# 1. Inspect dataset/media wiring.
+# 1. Download MotionAtlas-Data metadata and rebuild recipe parquet.
+bash scripts/download_motionatlas_data.sh data/motionatlas-data
+
+# 2. Inspect dataset/media wiring.
 python projects/motionatlas/tools/inspect_dataset.py \
   projects/motionatlas/configs/qwen3vl_4b_motionatlas.yaml \
   --limit 32
 
-# 2. Train Qwen3-VL-4B with MotionAtlas-Data.
+# 3. Train Qwen3-VL-4B with MotionAtlas-Data.
 bash scripts/train_qwen3vl.sh
 
-# 3. Convert the training checkpoint to HuggingFace format.
+# 4. Convert the training checkpoint to HuggingFace format.
 python projects/motionatlas/tools/convert_to_hf.py \
   --config projects/motionatlas/configs/qwen3vl_4b_motionatlas.yaml \
   --checkpoint work_dirs/qwen3vl_4b_motionatlas/iter_xxx.pth \

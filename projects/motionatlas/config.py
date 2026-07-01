@@ -101,3 +101,35 @@ def with_overrides(cfg: dict[str, Any], overrides: list[str] | None) -> dict[str
         apply_override(result, override)
     return result
 
+
+def dataset_kwargs_from_cfg(cfg: dict[str, Any]) -> dict[str, Any]:
+    model_cfg = cfg.get("model", {})
+    data_cfg = cfg.get("data", {})
+    ann_cfg = cfg.get("annotation", {})
+
+    return {
+        "model_path": model_cfg.get("name_or_path", "Qwen/Qwen3-VL-4B-Instruct"),
+        "hf_dataset": data_cfg.get("hf_dataset", "maxLWSv2/motionatlas-data"),
+        "data_root": data_cfg.get("local_dir", "data/motionatlas-data"),
+        "split": data_cfg.get("split", "train"),
+        "datasets": data_cfg.get("datasets"),
+        "data_paths": data_cfg.get("data_paths"),
+        "source_roots": data_cfg.get("source_roots", {}),
+        "source_sample_limits": data_cfg.get("source_sample_limits"),
+        "source_sample_seed": int(data_cfg.get("source_sample_seed", 42)),
+        "recipe_media_root": data_cfg.get("recipe_media_root", ""),
+        "image_source_dir": data_cfg.get("image_source_dir", ""),
+        "video_source_dir": data_cfg.get("video_source_dir", ""),
+        "skip_video": bool(data_cfg.get("skip_video", False)),
+        "strict_single_modality": bool(data_cfg.get("strict_single_modality", True)),
+        "max_frames": int(data_cfg.get("max_frames", 16)),
+        "per_frame_tokens": int(data_cfg.get("per_frame_tokens", 256)),
+        "max_seq_length": int(data_cfg.get("max_seq_length", 16384)),
+        "max_samples": int(data_cfg.get("max_samples", 0) or 0),
+        "annotation_routing": bool(data_cfg.get("annotation_routing", True)),
+        "annotation_drop_if_invalid": bool(data_cfg.get("annotation_drop_if_invalid", True)),
+        "annotation_mode": ann_cfg.get("mode", "highlight"),
+        "annotation_prompt": ann_cfg.get("prompt", "Describe the highlighted object in detail."),
+        "annotation_contour_color": ann_cfg.get("contour_color", [0, 255, 0]),
+        "annotation_contour_thickness": int(ann_cfg.get("contour_thickness", 2)),
+    }

@@ -4,6 +4,8 @@ from pathlib import Path
 from pprint import pformat
 from typing import Any
 
+from projects.motionatlas.config import dataset_kwargs_from_cfg
+
 
 def _torch_dtype_expr(name: str) -> str:
     mapping = {
@@ -19,8 +21,6 @@ def _torch_dtype_expr(name: str) -> str:
 
 def build_mmengine_config_text(cfg: dict[str, Any], source_config: str | Path) -> str:
     model_cfg = cfg.get("model", {})
-    data_cfg = cfg.get("data", {})
-    ann_cfg = cfg.get("annotation", {})
     train_cfg = cfg.get("train", {})
 
     model_path = model_cfg.get("name_or_path", "Qwen/Qwen3-VL-4B-Instruct")
@@ -36,21 +36,7 @@ def build_mmengine_config_text(cfg: dict[str, Any], source_config: str | Path) -
     seed = int(train_cfg.get("seed", 42))
     max_steps = int(train_cfg.get("max_steps", 0) or 0)
 
-    data_kwargs = {
-        "model_path": model_path,
-        "hf_dataset": data_cfg.get("hf_dataset", "maxLWSv2/motionatlas-data"),
-        "data_root": data_cfg.get("local_dir", "data/motionatlas-data"),
-        "split": data_cfg.get("split", "train"),
-        "source_roots": data_cfg.get("source_roots", {}),
-        "max_frames": int(data_cfg.get("max_frames", 16)),
-        "per_frame_tokens": int(data_cfg.get("per_frame_tokens", 256)),
-        "max_seq_length": int(data_cfg.get("max_seq_length", 16384)),
-        "max_samples": int(data_cfg.get("max_samples", 0) or 0),
-        "annotation_mode": ann_cfg.get("mode", "highlight"),
-        "annotation_prompt": ann_cfg.get("prompt", "Describe the highlighted object in detail."),
-        "annotation_contour_color": ann_cfg.get("contour_color", [0, 255, 0]),
-        "annotation_contour_thickness": int(ann_cfg.get("contour_thickness", 2)),
-    }
+    data_kwargs = dataset_kwargs_from_cfg(cfg)
 
     model_kwargs = {
         "mllm_name_or_path": model_path,
@@ -77,7 +63,7 @@ from transformers import AutoTokenizer
 from xtuner.dataset.samplers import LengthGroupedSampler
 from xtuner.engine.runner import TrainLoop
 
-from projects.motionatlas.datasets.motionatlas_qwen3vl_dataset import MotionAtlasQwen3VLDataset
+from projects.motionatlas.datasets import MotionAtlasMultimodalDataset
 from projects.motionatlas.datasets.collect_fns import qwen3vl_motionatlas_collect
 from projects.motionatlas.models.qwen3vl import Qwen3VLForMotionAtlas
 
@@ -107,7 +93,7 @@ model = dict(
 )
 
 train_dataset = dict(
-    type=MotionAtlasQwen3VLDataset,
+    type=MotionAtlasMultimodalDataset,
     **{pformat(data_kwargs, sort_dicts=False)},
 )
 
@@ -168,4 +154,3 @@ def write_generated_config(cfg: dict[str, Any], source_config: str | Path) -> Pa
     out_path = out_dir / (Path(source_config).stem + "_mmengine.py")
     out_path.write_text(build_mmengine_config_text(cfg, source_config), encoding="utf-8")
     return out_path
-

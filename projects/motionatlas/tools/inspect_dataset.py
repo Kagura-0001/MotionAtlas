@@ -4,9 +4,8 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Any
 
-from projects.motionatlas.config import extract_cfg_options, load_yaml_config
+from projects.motionatlas.config import dataset_kwargs_from_cfg, load_yaml_config
 from projects.motionatlas.datasets import MotionAtlasQwen3VLDataset
 
 
@@ -18,31 +17,10 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def build_dataset_kwargs(cfg: dict[str, Any]) -> dict[str, Any]:
-    model_cfg = cfg.get("model", {})
-    data_cfg = cfg.get("data", {})
-    ann_cfg = cfg.get("annotation", {})
-    return {
-        "model_path": model_cfg.get("name_or_path", "Qwen/Qwen3-VL-4B-Instruct"),
-        "hf_dataset": data_cfg.get("hf_dataset", "maxLWSv2/motionatlas-data"),
-        "data_root": data_cfg.get("local_dir", "data/motionatlas-data"),
-        "split": data_cfg.get("split", "train"),
-        "source_roots": data_cfg.get("source_roots", {}),
-        "max_frames": int(data_cfg.get("max_frames", 16)),
-        "per_frame_tokens": int(data_cfg.get("per_frame_tokens", 256)),
-        "max_seq_length": int(data_cfg.get("max_seq_length", 16384)),
-        "max_samples": int(data_cfg.get("max_samples", 0) or 0),
-        "annotation_mode": ann_cfg.get("mode", "highlight"),
-        "annotation_prompt": ann_cfg.get("prompt", "Describe the highlighted object in detail."),
-        "annotation_contour_color": ann_cfg.get("contour_color", [0, 255, 0]),
-        "annotation_contour_thickness": int(ann_cfg.get("contour_thickness", 2)),
-    }
-
-
 def main() -> int:
     args = parse_args()
     cfg = load_yaml_config(args.config, overrides=args.cfg_options)
-    dataset = MotionAtlasQwen3VLDataset(**build_dataset_kwargs(cfg))
+    dataset = MotionAtlasQwen3VLDataset(**dataset_kwargs_from_cfg(cfg))
 
     failures = []
     rows = []
@@ -76,4 +54,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
