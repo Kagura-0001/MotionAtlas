@@ -4,7 +4,7 @@ by
 [Weisong Liu](https://scholar.google.com/citations?user=a20rvfAAAAAJ),
 [Haochen Wang](https://scholar.google.com/citations?user=oNlpTdcAAAAJ&hl=en),
 Kuan Gao,
-[Yuhao Wang](https://scholar.google.com/citations?user=BMWOkScAAAAJ&hl=en),
+[Yuhao Wang](https://scholar.google.com/citations?user=aIX6QCQAAAAJ&hl=zh-CN),
 [Yikang Zhou](https://scholar.google.com/citations?user=dZikW2YAAAAJ&hl=en),
 [Zhongwei Ren](https://scholar.google.com/citations?user=e5TJm-0AAAAJ&hl=en),
 Jacky Mai,
